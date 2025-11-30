@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WebChat</title>
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            color: white;
+            font-family: "Poppins", sans-serif;
+        }
+
+        #bgVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 850px;
+            height: 85vh;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+            padding-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+        }
+
+        .chat-header {
+            background: rgba(180, 180, 180, 0.5);
+            padding: 15px;
+            font-size: 22px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        #messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .msg {
+            max-width: 70%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 15px;
+        }
+
+        .me {
+            background: rgba(200, 200, 200, 0.5);
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        .other {
+            background: rgba(9, 132, 227, 0.6);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        .username {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.25);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #msgInput {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #1a5ed8;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Video -->
+    <video id="bgVideo" autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='img/bg6.mp4') }}" type="video/mp4">
+    </video>
+
+    <div class="chat-container">
+        <h2 style="text-align:center;">ROOM KEY = {{ key }}</h2>
+
+        <div class="chat-header">WebChat</div>
+
+        <div id="messages"></div>
+
+        <div class="chat-input-area">
+            <input id="msgInput" type="text" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+    <script>
+        const socket = io();
+        const username = "{{ username }}";
+        const msgBox = document.getElementById("messages");
+        const input = document.getElementById("msgInput");
+
+        // Receive message
+        socket.on("message", function (data) {
+            let type = (data.user === username) ? "me" : "other";
+            let displayName = (data.user === username) ? "You" : data.user;
+
+            addMessage(displayName, data.text, type);
+        });
+
+        // Send message
+        function sendMessage() {
+            let text = input.value.trim();
+            if (text === "") return;
+
+            socket.emit("message", {
+                user: username,   // 👈 MOST IMPORTANT FIX
+                text: text
+            });
+
+            input.value = "";
+        }
+
+        // Add messages to UI
+        function addMessage(user, msg, type) {
+            const container = document.createElement("div");
+
+            const nameTag = document.createElement("div");
+            nameTag.classList.add("username");
+            nameTag.innerText = user;
+
+            const div = document.createElement("div");
+            div.classList.add("msg", type);
+            div.innerText = msg;
+
+            container.appendChild(nameTag);
+            container.appendChild(div);
+
+            msgBox.appendChild(container);
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+    </script>
+
+
+</body>
+
+</html>

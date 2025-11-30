@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebChat - Connect Instantly</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            color: #ffffff; /* Make all text white */
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Background video styling */
+        #bgVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            z-index: -1; 
+        }
+
+        .container {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background: #ffffff;
+            padding: 15px 40px;
+            font-size: 20px;
+            color: #000; /* Button text black for contrast */
+            border-radius: 30px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #ffffff;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            align-items: center;
+        }
+
+        header h2 {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        nav a {
+            color: #ffffff; /* Links white */
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 80px;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .neon-btn {
+            padding: 12px 30px;
+            border: 2px solid #f0f5f5;
+            background: transparent;
+            color: #ffffff; /* Make neon button text white */
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .neon-btn:hover {
+            background: #00eaff00;
+            color: rgb(255, 255, 255);
+            box-shadow: 0 0 15px #fffffffe;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="bgVideo" autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='img/bg3.mp4') }}" type="video/mp4">
+    </video>
+
+    <header>
+        <h2>WebChat</h2>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#login">Login</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Welcome to WebChat</h1>
+        <p>Your real-time messaging platform. Connect instantly, chat freely, and experience seamless communication with
+            your friends, team, or community.</p>
+
+        <button class="neon-btn" onclick="window.location.href='/login'">Get Started</button>
+    </div>
+
+    <div class="footer">© 2025 WebChat Application | All rights reserved.</div>
+</body>
+
+</html>
