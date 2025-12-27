@@ -49,9 +49,7 @@ def chat():
 
 
 
-# -----------------------------
-# SOCKET EVENT HANDLER
-# -----------------------------
+
 @socketio.on("message")
 def handle_message(data):
     username = data["user"]
